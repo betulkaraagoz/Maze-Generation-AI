@@ -7,14 +7,16 @@ def ucs(possible_ways, graph, start, goal):
     start.g = 0
     path = {}
     path[start.number] = [start]
+    expanded = 0;
 
     while queue:
         cost, node = queue.get()
+        expanded += 1
         if node not in visited:
             visited.add(node)
 
             if node == goal:
-                print("UCS found with cost " + str(cost))
+                print("UCS found with cost " + str(cost) + " by expanding " + str(expanded) + " nodes")
                 return path[node.number]
 
             for i in possible_ways[node.number]:

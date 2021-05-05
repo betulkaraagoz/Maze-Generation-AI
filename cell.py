@@ -1,3 +1,5 @@
+from math import sqrt
+
 import pygame
 
 
@@ -71,3 +73,15 @@ class Cell:
         @returns heuristic value H
         """
         return 10 * (abs(self.x - end.x) + abs(self.y - end.y))
+
+    def get_euclidean_heuristic(self, goal):
+        dx = abs(self.xIndex - goal.xIndex)
+        dy = abs(self.yIndex - goal.yIndex)
+        D = 1
+        return D * sqrt(dx * dx + dy * dy)
+
+    def get_manhattan_heuristic(self, goal):
+        dx = abs(self.xIndex - goal.xIndex)
+        dy = abs(self.yIndex - goal.yIndex)
+        D = 1
+        return D * (dx + dy)
