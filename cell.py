@@ -20,8 +20,8 @@ class Cell:
         self.visited = False
         #self.reachable = reachable
         self.parent = None
-        # cost to move from the starting cell to this cell
-        # #estimation of the cost to move from this cell to the ending cell.
+        # g = cost to move from the starting cell to this cell
+        # h = estimation of the cost to move from this cell to the ending cell.
         # f = g + h
         self.g = 0
         self.h = 0
