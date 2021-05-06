@@ -15,7 +15,7 @@ def main():
     run = True
     width = 1000
     height = 1000
-    n = 20
+    n = 10
     caption = "Maze {n:d}x{n:d}"
     win = pygame.display.set_mode((width, height))
     pygame.display.set_caption(caption.format(n=n))
@@ -52,10 +52,10 @@ def main():
 
         if stack == []:
             run = False
-            path = astar(possible_ways, grid, list(grid.nodes)[0], list(grid.nodes)[399])
-            path = ucs(possible_ways, grid, list(grid.nodes)[0], list(grid.nodes)[399])
-            #path, depth = IDDFS(possible_ways, grid, list(grid.nodes)[0], list(grid.nodes)[399], 5000)
-            #print("IDS found target in " + str(depth) + " depth for a " + str(n) + "x" + str(n) + " maze")
+            pathASTAR = astar(possible_ways, grid, list(grid.nodes)[0], list(grid.nodes)[99])
+            pathUCS = ucs(possible_ways, grid, list(grid.nodes)[0], list(grid.nodes)[99])
+            pathIDS, depth = IDDFS(possible_ways, grid, list(grid.nodes)[0], list(grid.nodes)[99], 5000)
+            print("IDS found target in " + str(depth) + " depth for a " + str(n) + "x" + str(n) + " maze")
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -65,15 +65,44 @@ def main():
         pygame.display.update()
 
     #wait for 10 seconds to display path
-    t_end = time.time() + 30
+    t_end = time.time() + 10
 
     while time.time() < t_end:
         for cell in grid.nodes:
             Cell.show(cell)
 
-        if path:
+        if pathASTAR:
             list(grid.nodes)[0].highlight_path()
-            for solution_node in path:
+            for solution_node in pathASTAR:
+                solution_node.highlight_path()
+
+        pygame.display.update()
+
+    t_end = time.time() + 10
+
+    print("after A*")
+
+    while time.time() < t_end:
+        for cell in grid.nodes:
+            Cell.show(cell)
+
+        if pathUCS:
+            list(grid.nodes)[0].highlight_path()
+            for solution_node in pathUCS:
+                solution_node.highlight_path()
+
+        pygame.display.update()
+
+    t_end = time.time() + 10
+    print("after UCS")
+
+    while time.time() < t_end:
+        for cell in grid.nodes:
+            Cell.show(cell)
+
+        if pathIDS:
+            list(grid.nodes)[0].highlight_path()
+            for solution_node in pathIDS:
                 solution_node.highlight_path()
 
         pygame.display.update()

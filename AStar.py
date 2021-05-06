@@ -2,7 +2,6 @@ from queue import PriorityQueue
 
 
 def astar(possible_ways, graph, start, goal):
-    visited = set()
     frontier = PriorityQueue()
     frontier.put((0, start))
 
@@ -17,23 +16,24 @@ def astar(possible_ways, graph, start, goal):
     expanded = 0
 
     while not frontier.empty():
-        cost, current = frontier.get()
+        other, current = frontier.get()
+        #print(current)
         expanded += 1
-        if current not in visited:
-            visited.add(current)
 
-            if current == goal:
-                print("A* found with cost " + str(cost) + " by expanding " + str(expanded) + " nodes")
-                return path[current.number]
+        if current == goal:
+            print("A* found with cost " + " by expanding " + str(expanded) + " nodes")
+            return path[current.number]
 
-            for next in possible_ways[current.number]:
-                if next not in visited:
-                    total_cost = cost + 1
-                    new_cost = cost_so_far[current] + total_cost
-                    if next not in cost_so_far or new_cost < cost_so_far[next]:
-                        cost_so_far[next] = new_cost
-                        priority = new_cost + next.get_manhattan_heuristic(goal)
-                        frontier.put((priority, next))
-                        came_from[next] = current
-                        path[next.number] = path[current.number].copy()
-                        path[next.number].append(next)
+        for next in possible_ways[current.number]:
+            total_cost = current.g + 1
+            new_cost = cost_so_far[current] + total_cost
+            #print(cost_so_far[current])
+            if next not in cost_so_far or new_cost < cost_so_far[next]:
+                next.g = total_cost
+                cost_so_far[next] = new_cost
+                #print(next.get_manhattan_heuristic(goal))
+                priority = new_cost + next.get_manhattan_heuristic(goal)
+                frontier.put((priority, next))
+                came_from[next] = current
+                path[next.number] = path[current.number].copy()
+                path[next.number].append(next)

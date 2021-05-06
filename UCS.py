@@ -7,7 +7,7 @@ def ucs(possible_ways, graph, start, goal):
     start.g = 0
     path = {}
     path[start.number] = [start]
-    expanded = 0;
+    expanded = 0
 
     while queue:
         cost, node = queue.get()
