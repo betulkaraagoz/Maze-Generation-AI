@@ -13,7 +13,7 @@ def DLS(possible_ways, graph, src, target, depth, path):
         return None
 
     # Recur for all the vertices adjacent to this vertex
-    adjacents = possible_ways[src.number]
+    adjacents = possible_ways[src.getIndex(src.xIndex, src.yIndex)]
 
     for node in adjacents:
         if node in path:

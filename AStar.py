@@ -1,7 +1,7 @@
 from queue import PriorityQueue
 
 
-def astar(possible_ways, graph, start, goal):
+def astar(possible_ways, graph, start, goal, heuristic):
     frontier = PriorityQueue()
     frontier.put((0, start))
 
@@ -17,7 +17,6 @@ def astar(possible_ways, graph, start, goal):
 
     while not frontier.empty():
         other, current = frontier.get()
-        #print(current)
         expanded += 1
 
         if current == goal:
@@ -27,12 +26,14 @@ def astar(possible_ways, graph, start, goal):
         for next in possible_ways[current.number]:
             total_cost = current.g + 1
             new_cost = cost_so_far[current] + total_cost
-            #print(cost_so_far[current])
             if next not in cost_so_far or new_cost < cost_so_far[next]:
                 next.g = total_cost
                 cost_so_far[next] = new_cost
-                #print(next.get_manhattan_heuristic(goal))
-                priority = new_cost + next.get_manhattan_heuristic(goal)
+                if heuristic == "manhattan":
+                    heuristic_value = next.get_manhattan_heuristic(goal)
+                elif heuristic == "euclidean":
+                    heuristic_value = next.get_euclidean_heuristic(goal)
+                priority = new_cost + heuristic_value
                 frontier.put((priority, next))
                 came_from[next] = current
                 path[next.number] = path[current.number].copy()

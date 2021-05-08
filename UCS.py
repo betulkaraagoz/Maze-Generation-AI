@@ -11,9 +11,10 @@ def ucs(possible_ways, graph, start, goal):
 
     while queue:
         cost, node = queue.get()
-        expanded += 1
+
         if node not in visited:
             visited.add(node)
+            expanded += 1
 
             if node == goal:
                 print("UCS found with cost " + str(cost) + " by expanding " + str(expanded) + " nodes")

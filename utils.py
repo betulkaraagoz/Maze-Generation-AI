@@ -1,3 +1,5 @@
+import math
+
 from cell import Cell
 import random as r
 import networkx as nx
@@ -54,3 +56,6 @@ def removeWalls(current, next_pos):
     elif yVal == -1:
         current.edges[2] = False
         next_pos.edges[0] = False
+
+def find_significant(number):
+    return round(number, 4 - int(math.floor(math.log10(abs(number)))) - 1)

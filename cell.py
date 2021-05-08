@@ -49,31 +49,60 @@ class Cell:
     def highlight(self):
         pygame.draw.rect(self.win, (255, 0, 255), (self.x, self.y, self.cellSize, self.cellSize))
 
-    def highlight_path(self, next_node):
-        if next_node.number > self.number:
-            if next_node.yIndex == self.yIndex:
-                #next is on the right
-                pygame.draw.line(self.win, (255, 0, 255), [self.x + self.cellSize/2, (self.y + self.cellSize/2)],
-                                 [(self.x + self.cellSize), (self.y + self.cellSize/2)], 4)
+    def highlight_path(self, next_node, prev_node):
+        if next_node is not None:
+            if next_node.number > self.number:
+                if next_node.yIndex == self.yIndex:
+                    #next is on the right
+                    pygame.draw.line(self.win, (255, 0, 255), [self.x + self.cellSize/2, (self.y + self.cellSize/2)],
+                                     [(self.x + self.cellSize), (self.y + self.cellSize/2)], 3)
 
-            elif next_node.xIndex == self.xIndex:
-                #next is below
-                pygame.draw.line(self.win, (255, 0, 255), [self.x + self.cellSize/2, (self.y + self.cellSize/2)],
-                                 [(self.x + self.cellSize/2), (self.y + self.cellSize)], 4)
+                elif next_node.xIndex == self.xIndex:
+                    #next is below
+                    pygame.draw.line(self.win, (255, 0, 255), [self.x + self.cellSize/2, (self.y + self.cellSize/2)],
+                                     [(self.x + self.cellSize/2), (self.y + self.cellSize)], 3)
 
 
-        else:
-            if next_node.yIndex == self.yIndex:
-                # next is on the left
-                pygame.draw.line(self.win, (255, 0, 255), [self.x + self.cellSize/2, (self.y + self.cellSize/2)],
-                                 [(self.x), (self.y + self.cellSize/2)], 4)
+            else:
+                if next_node.yIndex == self.yIndex:
+                    # next is on the left
+                    pygame.draw.line(self.win, (255, 0, 255), [self.x + self.cellSize/2, (self.y + self.cellSize/2)],
+                                     [(self.x), (self.y + self.cellSize/2)], 3)
 
-            elif next_node.xIndex == self.xIndex:
-                # next is above
-                pygame.draw.line(self.win, (255, 0, 255), [self.x + self.cellSize/2, (self.y + self.cellSize/2)],
-                                 [(self.x + self.cellSize/2), (self.y)], 4)
+                elif next_node.xIndex == self.xIndex:
+                    # next is above
+                    pygame.draw.line(self.win, (255, 0, 255), [self.x + self.cellSize/2, (self.y + self.cellSize/2)],
+                                     [(self.x + self.cellSize/2), (self.y)], 3)
 
-        #pygame.draw.circle(self.win, (255, 0, 255), (self.x + self.cellSize/2, self.y + self.cellSize/2), self.cellSize/5)
+        if prev_node is not None:
+            if prev_node.number > self.number:
+                if prev_node.yIndex == self.yIndex:
+                    #prev is on the right
+                    pygame.draw.line(self.win, (255, 0, 255), [self.x + self.cellSize/2, (self.y + self.cellSize/2)],
+                                     [(self.x + self.cellSize), (self.y + self.cellSize/2)], 3)
+
+                elif prev_node.xIndex == self.xIndex:
+                    #prev is below
+                    pygame.draw.line(self.win, (255, 0, 255), [self.x + self.cellSize/2, (self.y + self.cellSize/2)],
+                                     [(self.x + self.cellSize/2), (self.y + self.cellSize)], 3)
+
+            else:
+                if prev_node.yIndex == self.yIndex:
+                    # prev is on the left
+                    pygame.draw.line(self.win, (255, 0, 255), [self.x + self.cellSize/2, (self.y + self.cellSize/2)],
+                                     [(self.x), (self.y + self.cellSize/2)], 3)
+
+                elif prev_node.xIndex == self.xIndex:
+                    # prev is above
+                    pygame.draw.line(self.win, (255, 0, 255), [self.x + self.cellSize/2, (self.y + self.cellSize/2)],
+                                     [(self.x + self.cellSize/2), (self.y)], 3)
+
+        if next_node is None:
+            pygame.draw.circle(self.win, (255, 0, 0), (self.x + self.cellSize / 2, self.y + self.cellSize / 2),
+                               self.cellSize / 5)
+        if prev_node is None:
+            pygame.draw.circle(self.win, (0, 255, 0), (self.x + self.cellSize / 2, self.y + self.cellSize / 2),
+                               self.cellSize / 5)
 
     def getNeighIndex(self):
         top = self.getIndex(self.xIndex, self.yIndex - 1)
@@ -89,21 +118,12 @@ class Cell:
         else:
             return x + y * self.cols
 
-    def get_heuristic(self, end):
-        """Compute the heuristic value H for a cell.
-        Distance between this cell and the ending cell multiply by 10.
-        @returns heuristic value H
-        """
-        return 10 * (abs(self.x - end.x) + abs(self.y - end.y))
-
     def get_euclidean_heuristic(self, goal):
         dx = abs(self.xIndex - goal.xIndex)
         dy = abs(self.yIndex - goal.yIndex)
-        D = 1
-        return D * sqrt(dx * dx + dy * dy)
+        return sqrt(dx * dx + dy * dy)
 
     def get_manhattan_heuristic(self, goal):
         dx = abs(self.xIndex - goal.xIndex)
         dy = abs(self.yIndex - goal.yIndex)
-        D = 1
-        return D * (dx + dy)
+        return dx + dy
