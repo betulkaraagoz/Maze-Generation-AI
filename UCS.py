@@ -1,28 +1,32 @@
 from queue import PriorityQueue
 
-def ucs(possible_ways, graph, start, goal):
+def ucs(start, goal):
     visited = set()
     queue = PriorityQueue()
-    queue.put((0, start))
+    queue.put(start, 0)
     start.g = 0
+    start.priority = 0
+
     path = {}
     path[start.number] = [start]
     expanded = 0
 
     while queue:
-        cost, node = queue.get()
+        node = queue.get()
 
         if node not in visited:
             visited.add(node)
             expanded += 1
 
             if node == goal:
-                print("UCS found with cost " + str(cost) + " by expanding " + str(expanded) + " nodes")
+                print("UCS found with cost " + str(node.g) + " by expanding " + str(expanded) + " nodes")
                 return path[node.number]
 
-            for i in possible_ways[node.number]:
+            for i in node.possible_ways:
                 if i not in visited:
-                    total_cost = cost + 1
-                    queue.put((total_cost, i))
+                    total_cost = node.g + 1
+                    i.priority = total_cost
+                    i.g = total_cost
+                    queue.put(i, total_cost)
                     path[i.number] = path[node.number].copy()
                     path[i.number].append(i)

@@ -1,7 +1,7 @@
 expanded = 0
 
 
-def DLS(possible_ways, graph, src, target, depth, path):
+def DLS(graph, src, target, depth, path):
     global expanded
     current = path[len(path) - 1]
 
@@ -13,7 +13,7 @@ def DLS(possible_ways, graph, src, target, depth, path):
         return None
 
     # Recur for all the vertices adjacent to this vertex
-    adjacents = possible_ways[src.getIndex(src.xIndex, src.yIndex)]
+    adjacents = src.possible_ways
 
     for node in adjacents:
         if node in path:
@@ -21,15 +21,15 @@ def DLS(possible_ways, graph, src, target, depth, path):
         new_path = list(path)
         new_path.append(node)
         expanded += 1
-        result = DLS(possible_ways, graph, node, target, depth - 1, new_path)
+        result = DLS(graph, node, target, depth - 1, new_path)
         if result is not None:
             return result, expanded
 
 
-def IDDFS(possible_ways, graph, src, target, maxDepth):
+def IDDFS(graph, src, target, maxDepth):
     global expanded
     for depth in range(maxDepth):
-        path = DLS(possible_ways, graph, src, target, depth, [src])
+        path = DLS(graph, src, target, depth, [src])
         if path is None:
             continue
         return path, depth, expanded

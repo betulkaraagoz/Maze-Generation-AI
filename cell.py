@@ -14,22 +14,18 @@ class Cell:
         self.cellSize = cellSize
         self.cols = dim[0]
         self.rows = dim[1]
-        left = True
-        top = True
-        right = True
-        bottom = True
-        self.edges = [top, left, bottom, right]
+        self.edges = [True, True, True, True]
         self.visited = False
-        self.parent = None
-        # g = cost to move from the starting cell to this cell
-        # h = estimation of the cost to move from this cell to the ending cell.
-        # f = g + h
-        self.g = 0
-        self.h = 0
-        self.f = 0
+        self.priority = 0
+        self.possible_ways = []
+        self.g = 0 #cost from start to this node, used in UCS
+        self.f = 0 #total cost for A*
+        self.h = 0 #cost of heuristic
 
     def __lt__(self, other):
-        return self.f < other.f
+        #print(self.g)
+        #print(other.g)
+        return self.priority < other.priority
 
 
     def show(self):

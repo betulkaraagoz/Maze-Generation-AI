@@ -4,7 +4,7 @@ from cell import Cell
 import random as r
 import networkx as nx
 
-def initCells(win, width, height, n, possible_ways):
+def initCells(win, width, n):
     G = nx.Graph()
     counter = 0
 
@@ -13,9 +13,8 @@ def initCells(win, width, height, n, possible_ways):
 
     for x in range(rows):
         for y in range(cols):
-            counter += 1
             G.add_node(node_for_adding=Cell(win, y, x, cell_size, (cols, rows), counter))
-            possible_ways[counter] = []
+            counter += 1
 
     return G
 
@@ -56,6 +55,7 @@ def removeWalls(current, next_pos):
     elif yVal == -1:
         current.edges[2] = False
         next_pos.edges[0] = False
+
 
 def find_significant(number):
     return round(number, 4 - int(math.floor(math.log10(abs(number)))) - 1)
